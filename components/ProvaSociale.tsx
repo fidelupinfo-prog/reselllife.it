@@ -18,15 +18,12 @@ export default function ProvaSociale() {
   const [isMuted, setIsMuted] = useState(false);
   const [time, setTime] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
+  
+  const [centerIdx, setCenterIdx] = useState(2);
+  const [openFactor, setOpenFactor] = useState(0);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const triggerRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const touchStartY = useRef<number | null>(null);
-  const isHolding = useRef(false);
-  const wasHeld = useRef(false);
-  const holdTimer = useRef<NodeJS.Timeout | null>(null);
-  const isChanging = useRef(false);
+  const fanRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const frameId = requestAnimationFrame(() => {
@@ -34,6 +31,25 @@ export default function ProvaSociale() {
     });
     return () => cancelAnimationFrame(frameId);
   }, []);
+
+  // Scroll listener for fan
+  useEffect(() => {
+    const handleScroll = () => {
+      if (reducedMotion) {
+        setOpenFactor(1);
+        return;
+      }
+      if (!fanRef.current) return;
+      const fn = fanRef.current.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const fp2 = Math.min(1, Math.max(0, (vh * 0.75 - fn.top) / (vh * 0.6)));
+      setOpenFactor(fp2 * 1.8);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [reducedMotion]);
 
   useEffect(() => {
     if (activeStory !== null) {
@@ -48,37 +64,19 @@ export default function ProvaSociale() {
   }, [activeStory]);
 
   const closeViewer = useCallback(() => {
-    const prev = activeStory;
     setActiveStory(null);
-    if (prev !== null && triggerRefs.current[prev]) {
-      triggerRefs.current[prev]?.focus();
-    }
-  }, [activeStory]);
+  }, []);
 
   const nextStory = useCallback(() => {
-    if (activeStory === null || isChanging.current) return;
-    isChanging.current = true;
-    setTimeout(() => { isChanging.current = false; }, 300);
-
-    if (activeStory < stories.length - 1) {
-      setActiveStory(activeStory + 1);
-    } else {
-      closeViewer();
-    }
+    if (activeStory === null) return;
+    if (activeStory < stories.length - 1) setActiveStory(activeStory + 1);
+    else closeViewer();
   }, [activeStory, closeViewer]);
 
   const prevStory = useCallback(() => {
-    if (activeStory === null || isChanging.current) return;
-    isChanging.current = true;
-    setTimeout(() => { isChanging.current = false; }, 300);
-
-    if (activeStory > 0) {
-      setActiveStory(activeStory - 1);
-    } else {
-      if (videoRef.current) {
-        videoRef.current.currentTime = stories[0].start;
-      }
-    }
+    if (activeStory === null) return;
+    if (activeStory > 0) setActiveStory(activeStory - 1);
+    else if (videoRef.current) videoRef.current.currentTime = stories[0].start;
   }, [activeStory]);
 
   useEffect(() => {
@@ -94,186 +92,71 @@ export default function ProvaSociale() {
   }, [activeStory]);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = isMuted;
-    }
+    if (videoRef.current) videoRef.current.muted = isMuted;
   }, [isMuted]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video || activeStory === null) return;
-
     const onTimeUpdate = () => {
       setTime(video.currentTime);
-      const current = stories[activeStory];
-      if (video.currentTime >= current.end) {
-        nextStory();
-      }
+      if (video.currentTime >= stories[activeStory].end) nextStory();
     };
-
     video.addEventListener("timeupdate", onTimeUpdate);
     return () => video.removeEventListener("timeupdate", onTimeUpdate);
   }, [activeStory, nextStory]);
 
-  useEffect(() => {
-    if (activeStory === null) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeViewer();
-      else if (e.key === "ArrowRight") nextStory();
-      else if (e.key === "ArrowLeft") prevStory();
-      else if (e.key === " ") {
-        e.preventDefault();
-        if (videoRef.current) {
-          if (videoRef.current.paused) videoRef.current.play();
-          else videoRef.current.pause();
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeStory, closeViewer, nextStory, prevStory]);
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if (e.target instanceof Element && e.target.closest("button")) return;
-    isHolding.current = true;
-    wasHeld.current = false;
-    holdTimer.current = setTimeout(() => {
-      if (isHolding.current && videoRef.current) {
-        videoRef.current.pause();
-        wasHeld.current = true;
-      }
-    }, 200);
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    if (e.target instanceof Element && e.target.closest("button")) return;
-    isHolding.current = false;
-    if (holdTimer.current) clearTimeout(holdTimer.current);
-
-    if (wasHeld.current) {
-      if (videoRef.current) videoRef.current.play().catch(() => {});
-      return;
-    }
-
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    
-    const clientX = e.clientX;
-    const width = window.innerWidth;
-    if (clientX > width / 2) {
-      nextStory();
-    } else {
-      prevStory();
-    }
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartY.current === null) return;
-    const endY = e.changedTouches[0].clientY;
-    if (endY - touchStartY.current > 80) {
-      closeViewer();
-    }
-    touchStartY.current = null;
-  };
-
-  useEffect(() => {
-    if (activeStory === null || !containerRef.current) return;
-    const container = containerRef.current;
-    const focusable = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    if (focusable.length) {
-      focusable[0].focus();
-    }
-
-    const handleTab = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return;
-      if (!focusable.length) {
-        e.preventDefault();
-        return;
-      }
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    
-    container.addEventListener("keydown", handleTab);
-    return () => container.removeEventListener("keydown", handleTab);
-  }, [activeStory]);
-
   return (
-    <section id="risultati" aria-labelledby="risultati-heading" className="py-16 lg:py-28 rl-bg-d relative">
+    <section id="risultati" aria-labelledby="risultati-heading" className="sec prova relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 id="risultati-heading" data-reveal="blur" className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-center text-testo mb-4">
-          IL RESELLING, VISTO DALLA NOSTRA COMMUNITY.
+        <h2 id="risultati-heading" data-reveal="blur" className="h">
+          Il reselling, visto dalla nostra <span className="gt">community.</span>
         </h2>
-        <p data-reveal className="text-center text-testo/60 text-sm max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p data-reveal className="note" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
           Parlano loro. Risultati individuali, non rappresentativi né garantiti, e dipendono dall&apos;impegno e dal tempo dedicato.
         </p>
 
-        <div className="carousel-track" role="list" aria-label="Storie degli studenti">
-          {stories.map((story, idx) => (
-            <button
-              key={story.id}
-              role="listitem"
-              ref={(el) => {
-                triggerRefs.current[idx] = el;
-              }}
-              onClick={() => {
-                isChanging.current = false;
-                setActiveStory(idx);
-                setTime(story.start);
-              }}
-              aria-label={`Guarda la testimonianza di ${story.label}`}
-              className="carousel-slide relative w-[min(180px,42vw)] aspect-[9/16] rounded-2xl flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-viola text-left"
-            >
-              <div className="absolute inset-0 bg-gradient-to-tr from-viola to-accento rounded-2xl p-[3px]">
-                <div className="w-full h-full bg-notte rounded-[13px] overflow-hidden relative">
-                  <Image
-                    src={story.thumb}
-                    alt=""
-                    fill
-                    sizes="(max-width: 640px) 45vw, 180px"
-                    className="object-cover opacity-80"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white">
-                      <Play size={20} className="ml-1" />
-                    </div>
-                  </div>
-                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent pt-8 pb-3 px-3">
-                    <p className="text-xs font-semibold text-white truncate text-center">
-                      {story.label}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </button>
-          ))}
+        <div className="fan" id="fan" ref={fanRef}>
+          {stories.map((story, i) => {
+            const d = i - centerIdx;
+            let rot = d * 5 * openFactor;
+            let y = Math.abs(d) * 12 * openFactor;
+            if (centerIdx === i) {
+              rot = 0; y = 0;
+            }
+
+            return (
+              <button
+                key={story.id}
+                onClick={() => {
+                  if (centerIdx !== i) {
+                    setCenterIdx(i);
+                  } else {
+                    setActiveStory(i);
+                    setTime(story.start);
+                  }
+                }}
+                aria-label={`Studente ${i + 1}`}
+                className={`story ${centerIdx === i ? 'active' : ''}`}
+                style={{ transform: `rotate(${rot}deg) translateY(${y}px)` }}
+              >
+                <div className="bars"><i></i><i></i><i></i></div>
+                <Image src={story.thumb} alt="" fill sizes="(max-width: 640px) 45vw, 230px" className="object-cover" />
+                <span className="play" aria-hidden="true">▶</span>
+                <span className="who"><i></i>{story.label}</span>
+              </button>
+            );
+          })}
         </div>
+        <p className="hint">Tocca una storia per portarla al centro</p>
       </div>
 
       {activeStory !== null && (
         <div
-          ref={containerRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Visualizzatore testimonianze"
           className="fixed inset-0 z-[90] bg-black/90 flex items-center justify-center overflow-hidden"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
         >
-          {/* Container: mobile = full screen; desktop = centered 9:16 pillar */}
           <div className="relative w-full h-full sm:w-[calc(95vh*(9/16))] sm:h-[95vh] sm:rounded-2xl overflow-hidden bg-black flex flex-col">
             <div className="absolute top-0 inset-x-0 z-20 flex gap-1 px-2 pt-2 sm:pt-4">
               {stories.map((s, i) => {
@@ -285,13 +168,7 @@ export default function ProvaSociale() {
                 }
                 return (
                   <div key={s.id} className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden backdrop-blur-sm">
-                    <div
-                      className="h-full bg-white"
-                      style={{ 
-                        width, 
-                        transition: reducedMotion ? "none" : "width 100ms linear" 
-                      }}
-                    />
+                    <div className="h-full bg-white" style={{ width }} />
                   </div>
                 );
               })}
@@ -301,29 +178,17 @@ export default function ProvaSociale() {
               <span className="text-white/80 font-medium text-sm drop-shadow-md px-1">
                 {stories[activeStory].label}
               </span>
-              <div className="flex gap-3 pointer-events-auto">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    closeViewer();
-                  }}
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-md"
-                  aria-label="Chiudi"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+              <button onClick={(e) => { e.stopPropagation(); closeViewer(); }} className="w-8 h-8 flex items-center justify-center rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-md pointer-events-auto">
+                <X size={20} />
+              </button>
             </div>
 
-            <div 
-              className="flex-1 relative touch-none cursor-pointer"
-              onPointerDown={handlePointerDown}
-              onPointerUp={handlePointerUp}
-              onPointerLeave={(e) => {
-                if (isHolding.current) handlePointerUp(e);
-              }}
-              onContextMenu={(e) => e.preventDefault()}
-            >
+            <div className="flex-1 relative touch-none cursor-pointer" onClick={() => {
+              if (videoRef.current) {
+                if (videoRef.current.paused) videoRef.current.play();
+                else videoRef.current.pause();
+              }
+            }}>
               <video
                 ref={videoRef}
                 src="/videos/dicono/dicono-di-noi.mp4"
@@ -337,17 +202,8 @@ export default function ProvaSociale() {
             
             <div className="absolute bottom-4 inset-x-4 z-20 flex flex-col gap-3 pointer-events-none">
               <div className="flex justify-between items-end pointer-events-auto">
-                <p className="text-white/60 text-[10px] leading-tight max-w-[70%] drop-shadow-md">
-                  Risultati individuali, non garantiti.
-                </p>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsMuted(!isMuted);
-                  }}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-md"
-                  aria-label={isMuted ? "Attiva audio" : "Disattiva audio"}
-                >
+                <p className="text-white/60 text-[10px] leading-tight max-w-[70%] drop-shadow-md">Risultati individuali, non garantiti.</p>
+                <button onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-md">
                   {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
                 </button>
               </div>

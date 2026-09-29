@@ -1,148 +1,95 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { trackEvent } from "@/lib/analytics";
 
-// Cards collegabili — ogni card è un link cliccabile
 const bundles = [
   {
     src: "/fornitori/bundle-italiani.jpg",
     label: "Bundle Fornitori Italiani",
-    desc: "Contatti verificati, prezzi di ingresso, categorie di prodotto",
+    desc: "Contatti verificati, prezzi di ingresso, categorie di prodotto.",
     badge: "ITALIANO",
-    href: "https://payhip.com/b/bekUq",      // Payhip diretto
+    href: "https://payhip.com/b/bekUq",
     price: "27,99€",
-    external: true,
+    color: "var(--color-accento)",
+    textColor: "#0A0A0A"
   },
   {
     src: "/fornitori/bundle-internazionali.jpg",
     label: "Bundle Fornitori Internazionali",
-    desc: "Accesso a mercati esteri con margini più alti",
+    desc: "Accesso a mercati esteri con margini più alti.",
     badge: "INTERNAZIONALE",
     href: "https://payhip.com/b/OIhY5",
     price: "34,99€",
-    external: true,
+    color: "var(--color-blu)",
+    textColor: "#fff"
   },
   {
     src: "/fornitori/manuale-vinted.jpg",
     label: "Manuale Vinted",
-    desc: "Come approcciare ogni fornitore e negoziare le condizioni",
+    desc: "Come approcciare ogni fornitore e negoziare le condizioni.",
     badge: "GUIDA",
     href: "https://payhip.com/b/TIwXx",
     price: "14,99€",
-    external: true,
+    color: "var(--color-viola)",
+    textColor: "#fff"
   },
 ];
 
 export default function FornitoriSection() {
   return (
-    <section
-      id="fornitori"
-      aria-labelledby="fornitori-heading"
-      className="py-16 lg:py-28 bg-notte relative overflow-hidden"
-    >
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 w-full max-w-[800px] h-[800px] rl-glow-blu pointer-events-none" aria-hidden />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-          {/* ── Left: card bundle cliccabili ── */}
-          <div className="order-2 lg:order-1">
-            <div className="relative space-y-4">
-              {bundles.map((b, i) => (
-                <a
-                  key={i}
-                  href={b.href}
-                  target={b.external ? "_blank" : undefined}
-                  rel={b.external ? "noopener noreferrer" : undefined}
-                  onClick={() => trackEvent("fornitore_click")}
-                  data-reveal
-                  className="group relative flex items-center gap-4 p-4 bg-superficie border border-bordo rounded-card hover:-translate-y-0.5 cursor-pointer transition-all hover:border-blu/60 hover:shadow-[0_10px_40px_rgba(47,107,255,0.25)]"
-                  style={{
-                    "--reveal-delay": `${i * 120}ms`,
-                    transform:
-                      i === 1 ? "translateX(2rem)" : i === 2 ? "translateX(1rem)" : "none",
-                  } as React.CSSProperties}
-                  aria-label={`Acquista ${b.label} — ${b.price}`}
-                >
-                  {/* Immagine prodotto */}
-                  <div className="relative w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden border border-blu/25">
-                    <Image
-                      src={b.src}
-                      alt={b.label}
-                      fill
-                      sizes="80px"
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-poppins font-bold text-blu bg-blu/10 border border-blu/30 rounded-full px-2 py-0.5 tracking-widest uppercase">
-                        {b.badge}
-                      </span>
-                      <span className="text-xs font-poppins font-bold text-testo ml-auto">
-                        {b.price}
-                      </span>
-                    </div>
-                    <p className="font-poppins font-semibold text-testo text-sm truncate">
-                      {b.label}
-                    </p>
-                    <p className="text-muted/70 text-xs font-poppins mt-0.5 leading-snug">
-                      {b.desc}
-                    </p>
-                  </div>
-
-                  {/* Freccia → appare su hover */}
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-transparent group-hover:bg-blu/20 flex items-center justify-center transition-all duration-300">
-                    <svg
-                      className="w-4 h-4 text-transparent group-hover:text-blu transition-colors"
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-                      aria-hidden
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </a>
-              ))}
-
-              {/* rimossa ombra */}
-            </div>
-          </div>
-
-          {/* ── Right: copy ── */}
-          <div className="order-1 lg:order-2">
-            <p className="text-blu font-poppins font-semibold text-sm uppercase tracking-[0.2em] mb-4">
-              I fornitori
-            </p>
-            <h2
-              id="fornitori-heading"
-              data-reveal="blur"
-              className="font-anton text-[clamp(2rem,5vw,3.5rem)] uppercase text-testo leading-none mb-6"
-            >
-              NON PARTI DA ZERO.
-              <br />
-              <span className="text-blu">PARTI DA UNA BASE.</span>
+    <section className="sec forn" id="fornitori" aria-labelledby="forn-h">
+      <div className="glow" style={{ width: "800px", height: "800px", left: "-300px", top: "10%", background: "radial-gradient(closest-side,rgba(47,107,255,.18),transparent)", position: "absolute" }}></div>
+      <div className="wrap relative z-10">
+        <div className="top">
+          <div>
+            <p className="eyebrow" data-reveal>I fornitori</p>
+            <h2 className="h" id="forn-h" data-reveal style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
+              Non parti da zero.<br /><span className="b">Parti da una base.</span>
             </h2>
-            <p data-reveal className="text-muted font-poppins leading-relaxed mb-8 max-w-lg">
-              Accedi ai nostri fornitori e alle risorse operative già organizzate
-              per aiutarti a capire cosa acquistare, dove acquistare e come
-              iniziare a testare il mercato.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/fornitori"
-                onClick={() => trackEvent("fornitori_section_cta")}
-                className="inline-block py-4 px-6 rounded-btn bg-blu text-testo font-poppins font-semibold text-sm text-center hover:bg-blu-hover transition-all hover:scale-[1.02]"
-              >
-                VEDI TUTTI I FORNITORI →
-              </Link>
-            </div>
           </div>
-
+          <div data-reveal style={{ "--reveal-delay": "160ms" } as React.CSSProperties}>
+            <p className="lead" style={{ marginTop: 0 }}>
+              Accedi ai nostri fornitori e alle risorse operative già organizzate per aiutarti a capire cosa acquistare, dove acquistare e come iniziare a testare il mercato.
+            </p>
+            <a className="btn btn-blu" href="#fornitori" style={{ marginTop: "1.4rem" }}>
+              Vedi tutti i fornitori <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+        <div className="prods">
+          {bundles.map((b, i) => (
+            <a 
+              key={i} 
+              className="prod" 
+              href={b.href} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={() => trackEvent("fornitore_click")}
+              data-reveal 
+              style={{ 
+                "--reveal-delay": `${i * 120}ms`, 
+                "--c": b.color, 
+                "--ct": b.textColor 
+              } as React.CSSProperties}
+            >
+              <div className="img">
+                <Image src={b.src} alt={b.label} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                <span className="chip">{b.badge}</span>
+              </div>
+              <div className="body">
+                <div className="row">
+                  <h3>{b.label}</h3>
+                  <span className="pr">{b.price}</span>
+                </div>
+                <p>{b.desc}</p>
+                <div className="go">
+                  <span>Acquista su Payhip</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+              </div>
+            </a>
+          ))}
         </div>
       </div>
     </section>
