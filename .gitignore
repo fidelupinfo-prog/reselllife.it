@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Media pesante — NON committare video/foto nel repo
+# I file restano sul server (Railway volume o CDN)
+public/videos/
+public/fotos/
+fotos/
+*.mp4
+*.mov
+*.avi
+*.webm

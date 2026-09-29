@@ -40,7 +40,7 @@ export default function MobileStickyCTA() {
     <div
       className="
         fixed bottom-0 left-0 right-0 z-50 p-3 
-        bg-notte/90 backdrop-blur-sm border-t border-bordo
+        rl-bg-b border-t border-bordo
         flex md:hidden
         translate-y-0 transition-transform duration-200
       "
@@ -52,7 +52,6 @@ export default function MobileStickyCTA() {
           flex-1 py-3.5 px-5 rounded-btn bg-accento text-testo
           font-anton uppercase text-base tracking-wide text-center
           hover:bg-accento-hover transition-colors
-          shadow-lg shadow-accento/20
         "
       >
         SCARICA LA GUIDA GRATUITA

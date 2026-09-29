@@ -9,15 +9,11 @@ export default function CallSection() {
     <section
       id="call"
       aria-labelledby="call-heading"
-      className="py-16 lg:py-28 bg-superficie relative overflow-hidden"
+      className="py-16 lg:py-28 rl-bg-b relative overflow-hidden"
     >
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-br from-superficie via-[#14082a] to-superficie pointer-events-none"
-      />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-notte border border-bordo rounded-2xl p-10 lg:p-14 text-center hover:border-viola/20 transition-colors duration-300">
+        <div className="rl-card p-10 lg:p-14 text-center">
           {/* Icon */}
           <div className="w-16 h-16 rounded-full bg-viola/15 border border-viola/30 flex items-center justify-center mx-auto mb-6">
             <Phone className="w-7 h-7 text-viola" strokeWidth={1.75} />
@@ -29,6 +25,7 @@ export default function CallSection() {
 
           <h2
             id="call-heading"
+            data-reveal="blur"
             className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-testo leading-none mb-6"
           >
             HAI ANCORA DUBBI?

@@ -212,12 +212,12 @@ export default function ProvaSociale() {
   }, [activeStory]);
 
   return (
-    <section id="risultati" aria-labelledby="risultati-heading" className="py-16 lg:py-28 bg-superficie">
+    <section id="risultati" aria-labelledby="risultati-heading" className="py-16 lg:py-28 rl-bg-d relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 id="risultati-heading" className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-center text-testo mb-4">
+        <h2 id="risultati-heading" data-reveal="blur" className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-center text-testo mb-4">
           IL RESELLING, VISTO DALLA NOSTRA COMMUNITY.
         </h2>
-        <p className="text-center text-testo/60 text-sm max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p data-reveal className="text-center text-testo/60 text-sm max-w-2xl mx-auto mb-10 leading-relaxed">
           Parlano loro. Risultati individuali, non rappresentativi né garantiti, e dipendono dall&apos;impegno e dal tempo dedicato.
         </p>
 

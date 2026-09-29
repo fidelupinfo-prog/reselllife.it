@@ -9,12 +9,8 @@ export default function Scelta() {
     <section
       id="scelta"
       aria-labelledby="scelta-heading"
-      className="py-16 lg:py-28 bg-superficie relative overflow-hidden"
+      className="py-16 lg:py-28 rl-bg-a relative overflow-hidden"
     >
-      <div
-        aria-hidden
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[60vw] h-[40vh] rounded-full bg-viola/8 blur-[120px] pointer-events-none"
-      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
@@ -23,6 +19,7 @@ export default function Scelta() {
           </p>
           <h2
             id="scelta-heading"
+            data-reveal="blur"
             className="font-anton text-[clamp(2rem,5vw,3.5rem)] uppercase text-testo leading-none"
           >
             DA DOVE VUOI PARTIRE?
@@ -31,20 +28,23 @@ export default function Scelta() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_0.55fr] gap-6 lg:gap-8 items-start max-w-5xl mx-auto">
           {/* ── Card primaria: Academy ── */}
-          <div className="relative bg-gradient-to-br from-viola/20 via-[#1a0a30] to-superficie border border-viola/50 rounded-card-lg p-8 lg:p-10 flex flex-col gap-6 shadow-[0_0_60px_rgba(123,47,214,0.2)]">
+          <div className="relative bg-[#130924] border-2 border-viola rounded-2xl p-8 lg:p-10 flex flex-col gap-6 overflow-hidden shadow-[0_8px_30px_rgba(123,47,214,0.15)] transform transition-transform hover:-translate-y-1">
+            {/* Geometric corner accent */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-viola/10 rounded-bl-full pointer-events-none" aria-hidden />
+
             {/* Recommended badge */}
-            <div className="inline-flex items-center gap-1.5 bg-viola text-testo rounded-full px-3 py-1 self-start shadow-sm shadow-viola/40">
-              <span className="w-1.5 h-1.5 rounded-full bg-testo inline-block" />
-              <span className="text-xs font-poppins font-semibold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1.5 bg-viola text-white rounded-full px-3.5 py-1.5 self-start">
+              <span className="w-1.5 h-1.5 rounded-full bg-white inline-block animate-pulse" />
+              <span className="text-[11px] font-poppins font-bold uppercase tracking-[0.2em]">
                 02 COSTRUIRE
               </span>
             </div>
 
             <div>
-              <h3 className="font-anton text-3xl lg:text-4xl uppercase text-testo mb-3">
+              <h3 className="font-anton text-4xl lg:text-5xl uppercase text-testo mb-3">
                 ACADEMY RESELLIFE
               </h3>
-              <p className="text-muted/75 font-poppins leading-relaxed text-sm">
+              <p className="text-muted/80 font-poppins leading-relaxed text-sm max-w-sm">
                 Metodo completo, strumenti e supporto. Tutto in un posto solo.
               </p>
             </div>
@@ -59,30 +59,30 @@ export default function Scelta() {
                 "Guida bonus di benvenuto",
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
-                  <span className="w-5 h-5 rounded-full bg-viola/20 border border-viola/40 flex items-center justify-center flex-shrink-0">
-                    <span className="text-viola text-[10px]">✓</span>
+                  <span className="w-6 h-6 rounded-full bg-viola/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-viola text-xs font-bold">✓</span>
                   </span>
-                  {item}
+                  <span className="font-medium text-testo/90">{item}</span>
                 </li>
               ))}
             </ul>
 
             {/* Price */}
-            <div className="border-t border-viola/20 pt-5">
-              <p className="text-3xl font-anton text-testo">
-                90€{" "}
-                <span className="text-base font-poppins font-normal text-testo/40">
-                  accesso completo
+            <div className="border-t border-viola/20 pt-6 mt-2">
+              <p className="text-4xl font-anton text-testo flex items-baseline gap-2">
+                90€
+                <span className="text-sm font-poppins font-normal text-testo/50 tracking-wide uppercase">
+                  / Accesso completo
                 </span>
               </p>
             </div>
 
-            {/* CTA — VIOLA, non magenta */}
+            {/* CTA */}
             <a
               href={ACADEMY_URL}
               onClick={() => trackEvent("academy_click")}
               id="cta-entra-academy"
-              className="block w-full py-4 px-6 rounded-btn bg-viola text-testo font-poppins font-bold uppercase text-base tracking-wide text-center hover:bg-viola-hover transition-all hover:scale-[1.02] active:scale-[0.99] shadow-lg shadow-viola/30"
+              className="block w-full py-4 px-6 rounded-btn bg-viola text-white font-poppins font-bold uppercase text-base tracking-widest text-center hover:bg-viola-hover transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-viola/20 mt-2"
               rel="noopener"
             >
               ENTRA IN ACADEMY →
@@ -97,10 +97,13 @@ export default function Scelta() {
           </div>
 
           {/* ── Card secondaria: Fornitore ── */}
-          <div className="bg-notte border border-bordo rounded-card p-6 flex flex-col gap-5 hover:border-viola/20 transition-colors duration-200">
+          <div className="rl-card p-6 flex flex-col gap-5 opacity-80 hover:opacity-100 transition-opacity duration-300">
             <div>
-              <h3 className="font-anton text-2xl uppercase text-testo mb-2">
+              <p className="text-[11px] font-poppins font-bold uppercase tracking-[0.2em] text-muted/50 mb-2">
                 01 TESTARE
+              </p>
+              <h3 className="font-anton text-2xl uppercase text-testo mb-2">
+                FORNITORE SINGOLO
               </h3>
               <p className="text-muted/55 text-sm font-poppins leading-relaxed">
                 Un fornitore singolo per testare senza impegno.

@@ -1,28 +1,22 @@
 export default function BrandStatement() {
-  const items = ["METODO", "FORNITORI", "BOT", "GUIDE", "COMMUNITY"];
+  const items = ["METODO", "FORNITORI", "BOT", "GUIDE", "COMMUNITY", "RESELLING"];
 
   return (
     <div
-      className="bg-viola/10 border-y border-viola/20 py-3 relative overflow-hidden"
+      className="border-y border-bordo py-3 relative overflow-hidden rl-bg-b"
       aria-label="Pillars: Metodo, Fornitori, Bot, Guide, Community"
     >
-      {/* Fade edges */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-full w-16 z-10 bg-gradient-to-r from-[#160d20] to-transparent"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-0 top-0 h-full w-16 z-10 bg-gradient-to-l from-[#160d20] to-transparent"
-      />
+      {/* fade laterali */}
+      <div aria-hidden className="pointer-events-none absolute left-0 top-0 h-full w-20 z-10"
+        style={{ background: "linear-gradient(to right, #160D20, transparent)" }} />
+      <div aria-hidden className="pointer-events-none absolute right-0 top-0 h-full w-20 z-10"
+        style={{ background: "linear-gradient(to left, #160D20, transparent)" }} />
 
       <div className="marquee-track" aria-hidden>
-        {[...items, ...items, ...items, ...items].map((item, i) => (
-          <span key={i} className="flex items-center gap-8 px-4">
-            <span className="font-anton text-sm tracking-[0.25em] uppercase text-viola">
-              {item}
-            </span>
-            <span className="text-accento/40 text-base leading-none">·</span>
+        {[...items, ...items, ...items].map((item, i) => (
+          <span key={i} className="flex items-center gap-6 px-6">
+            <span className="rl-label">{item}</span>
+            <span className="w-1 h-1 rounded-full bg-bordo inline-block" />
           </span>
         ))}
       </div>

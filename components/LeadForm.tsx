@@ -96,7 +96,7 @@ export default function LeadForm({
     return (
       <div
         id={id}
-        className="bg-superficie border border-bordo rounded-card-lg p-8 text-center"
+        className="rl-card p-8 text-center"
         role="alert"
         aria-live="polite"
       >
@@ -129,7 +129,7 @@ export default function LeadForm({
       onSubmit={handleSubmit}
       onChange={handleChange}
       noValidate
-      className="bg-superficie border border-bordo rounded-card-lg p-6 md:p-8 space-y-5"
+      className="rl-card p-6 md:p-8 space-y-5"
       aria-label="Modulo per scaricare la guida gratuita"
     >
       {/* Nome */}
@@ -259,7 +259,7 @@ export default function LeadForm({
         type="submit"
         disabled={state === "loading"}
         onClick={() => trackEvent("cta_guida_click")}
-        className="w-full py-4 px-6 rounded-btn bg-accento text-testo font-anton uppercase text-lg tracking-wide hover:bg-accento-hover transition-all hover:scale-[1.02] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg shadow-accento/20"
+        className="w-full py-4 px-6 rounded-btn bg-accento text-testo font-anton uppercase text-lg tracking-wide hover:bg-accento-hover transition-all hover:scale-[1.02] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         {state === "loading" ? "Invio in corso…" : "SCARICA LA GUIDA"}
       </button>

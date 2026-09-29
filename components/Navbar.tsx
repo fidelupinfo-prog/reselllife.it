@@ -10,12 +10,16 @@ interface NavbarProps {
   academyUrl: string;
 }
 
-// Logo: /public/logo.png (replace with real asset from Drive)
+// Logo: aggiungi /public/logo.png dall'asset reale (Drive 01_LOGO) e cambia il valore qui sotto a false
+// TODO: quando il file logo.png è caricato in /public/, imposta LOGO_MISSING = false
+const LOGO_MISSING = true;
 const LOGO_SRC = "/logo.png";
 
 export default function Navbar({ academyUrl }: NavbarProps) {
   const [scrolled, setScrolled]         = useState(false);
-  const [logoError, setLogoError]       = useState(false);
+  // logoError: inizia a true perché /public/logo.png non esiste ancora (HTTP 400 in produzione)
+  // Quando il file viene aggiunto, impostare LOGO_MISSING = false in cima al file
+  const [logoError, setLogoError]       = useState(LOGO_MISSING);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);

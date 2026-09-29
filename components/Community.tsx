@@ -8,13 +8,8 @@ export default function Community() {
     <section
       id="community"
       aria-labelledby="community-heading"
-      className="py-16 lg:py-28 bg-notte relative overflow-hidden"
+      className="py-16 lg:py-28 rl-bg-a relative overflow-hidden"
     >
-      {/* Background accent */}
-      <div
-        aria-hidden
-        className="absolute bottom-0 right-0 w-[50vw] h-[50vh] rounded-full bg-accento/4 blur-3xl pointer-events-none"
-      />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2
@@ -40,7 +35,7 @@ export default function Community() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="bg-superficie border border-bordo rounded-card p-4"
+              className="rl-card p-4"
             >
               <p className="font-anton text-xl text-testo">{stat.value}</p>
               <p className="text-xs text-testo/40 mt-1">{stat.label}</p>

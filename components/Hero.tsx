@@ -1,247 +1,134 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { trackEvent } from "@/lib/analytics";
-import { QUIZ_URL, ACADEMY_URL } from "@/lib/config";
+import { QUIZ_URL } from "@/lib/config";
 
-// Floating badge data — swapped for video when real asset is added
-const BADGES = [
-  { label: "VINTED",      delay: 0,    top: "12%",  left: "-8%"  },
-  { label: "+28€",        delay: 150,  top: "32%",  right: "-10%"},
-  { label: "BOT ALERT",  delay: 300,  top: "60%",  left: "-12%"  },
-  { label: "VENDUTO ✓",  delay: 450,  top: "78%",  right: "-8%"  },
-  { label: "700+ ISCRITTI", delay: 600, top: "5%", right: "5%"   },
-];
-
-// Logo path — replace with real logo from Drive
-const LOGO_SRC = "/logo.png";
+const VIDEO_SRC    = "/videos/sito/video-principale.mp4";
+const VIDEO_POSTER = "/videos/sito/thumb-principale.jpg";
+// TODO: logo reale → aggiungere /public/logo.png da Drive 01_LOGO e abilitare in Navbar.tsx
 
 export default function Hero() {
-  const heroDivRef  = useRef<HTMLDivElement>(null);
-  const [logoErr, setLogoErr] = useState(false);
-  const [visibleBadges, setVisibleBadges] = useState<boolean[]>(
-    Array(BADGES.length).fill(false)
-  );
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const videoRef   = useRef<HTMLVideoElement>(null);
+  const [videoReady,  setVideoReady]  = useState(false);
 
-  // Analytics impression
   useEffect(() => {
-    const el = heroDivRef.current;
+    const el = sectionRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          trackEvent("view_hero");
-          observer.disconnect();
-        }
-      },
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { trackEvent("view_hero"); io.disconnect(); } },
       { threshold: 0.1 }
     );
-    observer.observe(el);
-    return () => observer.disconnect();
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
-  // Staggered badge reveal
   useEffect(() => {
-    BADGES.forEach((badge, i) => {
-      setTimeout(() => {
-        setVisibleBadges(prev => {
-          const next = [...prev];
-          next[i] = true;
-          return next;
-        });
-      }, 800 + badge.delay);
-    });
+    const v = videoRef.current;
+    if (!v) return;
+    v.play().catch(() => {});
+    const onCan = () => setVideoReady(true);
+    v.addEventListener("canplaythrough", onCan);
+    return () => v.removeEventListener("canplaythrough", onCan);
   }, []);
 
   return (
     <section
-      ref={heroDivRef}
+      ref={sectionRef}
       id="hero"
       aria-label="Hero Resellife Academy"
-      className="relative min-h-screen flex items-center overflow-hidden pt-16"
+      className="relative min-h-screen flex items-end overflow-hidden"
     >
-      {/* Background */}
+      {/* ── VIDEO FULLSCREEN ── */}
+      <video
+        ref={videoRef}
+        src={VIDEO_SRC}
+        poster={VIDEO_POSTER}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+          videoReady ? "opacity-100" : "opacity-0"
+        }`}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden
+      />
+
+      {/* Poster visibile finché il video non è pronto */}
+      {!videoReady && (
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-notte"
+          style={{
+            backgroundImage: `url(${VIDEO_POSTER})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      )}
+
+      {/* ── OVERLAY: gradiente basso → alto, legibilità testo ── */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-br from-notte via-[#110820] to-[#1a0835] pointer-events-none"
-      />
-      <div
-        aria-hidden
-        className="absolute top-0 right-0 w-[70vw] h-[70vh] rounded-full bg-viola/10 blur-[120px] pointer-events-none"
-      />
-      <div
-        aria-hidden
-        className="absolute bottom-0 left-0 w-[40vw] h-[40vh] rounded-full bg-accento/5 blur-[100px] pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(13,7,20,0.96) 0%, rgba(13,7,20,0.6) 40%, rgba(13,7,20,0.25) 100%)",
+        }}
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      {/* ── CONTENUTO — allineato in basso ── */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 lg:pb-24">
+        <div className="max-w-3xl">
 
-          {/* ── Left column: copy ── */}
-          <div>
-            {/* 700+ badge */}
-            <div className="hero-animate-h1 inline-flex items-center gap-2 bg-viola/10 border border-viola/30 rounded-full px-4 py-1.5 mb-6">
-              <span className="w-2 h-2 rounded-full bg-viola inline-block animate-pulse" />
-              <span className="text-xs font-medium text-muted uppercase tracking-wider">
-                700+ studenti italiani · Resellife Academy
-              </span>
-            </div>
+          {/* Numero sezione editoriale */}
+          <p className="rl-section-num mb-4">— 01</p>
 
-            {/* Logo (if available) */}
-            {!logoErr && (
-              <div className="hero-animate-h1 mb-4">
-                <Image
-                  src={LOGO_SRC}
-                  alt="Resellife Academy"
-                  width={180}
-                  height={48}
-                  className="h-10 w-auto object-contain"
-                  onError={() => setLogoErr(true)}
-                  priority
-                />
-              </div>
-            )}
+          {/* H1 */}
+          <h1 className="hero-animate-h1 font-anton text-[clamp(3rem,8vw,6.5rem)] leading-[0.93] uppercase tracking-tight text-white mb-6">
+            INIZIA A FARE
+            <br />
+            RESELLING
+            <br />
+            <span className="text-viola">CON UN METODO.</span>
+          </h1>
 
-            {/* H1 */}
-            <h1 className="hero-animate-h1 font-anton text-[clamp(2.6rem,7vw,5rem)] leading-none uppercase tracking-tight text-testo mb-6">
-              INIZIA A FARE
-              <br />
-              RESELLING
-              <br />
-              <span className="text-viola">CON UN METODO.</span>
-            </h1>
+          <p className="hero-animate-sub font-poppins text-[clamp(0.95rem,1.8vw,1.1rem)] text-white/65 leading-relaxed max-w-xl mb-8">
+            Fornitori verificati, Bot Resellife, guide operative e community.
+            Tutto quello che serve per iniziare — senza andare a tentativi.
+          </p>
 
-            <p className="hero-animate-sub text-[clamp(0.95rem,1.8vw,1.1rem)] text-muted leading-relaxed mb-8 max-w-lg font-poppins">
-              Fornitori, strumenti, guide e supporto per iniziare nel reselling
-              senza andare a tentativi.
-            </p>
-
-            {/* CTAs */}
-            <div className="hero-animate-cta flex flex-col sm:flex-row gap-3 mb-8">
-              <a
-                href={QUIZ_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("cta_quiz_hero")}
-                id="cta-quiz-hero"
-                className="flex-1 sm:flex-none py-4 px-6 rounded-btn bg-viola text-testo font-poppins font-semibold text-base text-center hover:bg-viola-hover transition-all hover:scale-[1.02] active:scale-[0.99] shadow-lg shadow-viola/30 whitespace-nowrap"
-              >
-                SCOPRI SE IL RESELLING FA PER TE →
-              </a>
-              <a
-                href="#scelta"
-                onClick={() => trackEvent("cta_academy_hero")}
-                id="cta-academy-hero"
-                className="flex-1 sm:flex-none py-4 px-6 rounded-btn border border-testo/30 text-testo font-poppins font-medium text-base text-center hover:border-viola/60 hover:bg-viola/10 transition-all whitespace-nowrap"
-              >
-                SCOPRI RESELLIFE ACADEMY
-              </a>
-            </div>
-
-            {/* Social proof mini-row */}
-            <div className="hero-animate-cta flex items-center gap-4">
-              <div className="flex -space-x-2">
-                {["M", "L", "G", "S"].map((letter, i) => (
-                  <div
-                    key={i}
-                    aria-hidden
-                    className="w-8 h-8 rounded-full bg-gradient-to-br from-viola to-accento border-2 border-notte flex items-center justify-center text-xs font-bold text-testo"
-                  >
-                    {letter}
-                  </div>
-                ))}
-              </div>
-              <p className="text-sm text-testo/60 font-poppins">
-                Si sono iscritti{" "}
-                <span className="text-testo font-medium">questa settimana</span>
-              </p>
-            </div>
-          </div>
-
-          {/* ── Right column: video + floating badges ── */}
-          <div className="hidden lg:flex items-center justify-center hero-animate-cta">
-            <div className="relative">
-              {/* Phone/video frame */}
-              <div className="relative w-[300px] aspect-[9/16] rounded-[28px] overflow-hidden shadow-[0_0_80px_rgba(123,47,214,0.4)] border border-viola/20">
-                {/*
-                  REAL VIDEO: when the mp4 is available from Drive, replace the
-                  gradient placeholder below with:
-                  <video
-                    className="absolute inset-0 w-full h-full object-cover"
-                    src="/videos/hero.mp4"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
-                */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1a0835] via-viola/30 to-[#0D0714] flex flex-col items-center justify-center gap-4 p-6">
-                  <div className="w-16 h-16 rounded-full bg-viola/20 border border-viola/40 flex items-center justify-center mb-2">
-                    {!logoErr ? (
-                      <Image
-                        src={LOGO_SRC}
-                        alt="Resellife"
-                        width={40}
-                        height={40}
-                        className="w-10 h-10 object-contain"
-                        onError={() => setLogoErr(true)}
-                      />
-                    ) : (
-                      <span className="font-anton text-viola text-lg">R</span>
-                    )}
-                  </div>
-                  <p className="text-center text-xs text-muted/60 font-poppins">
-                    Video reale in arrivo
-                    <br />
-                    <span className="text-testo/30 text-[10px]">Drive: CLIP RESELLIFE ACADEMY</span>
-                  </p>
-                  {/* Simulated stats */}
-                  <div className="w-full space-y-2 mt-2">
-                    {[
-                      { label: "Vendita conclusa", value: "+28€", color: "text-emerald-400" },
-                      { label: "Acquisto completato", value: "12€ → 45€", color: "text-viola" },
-                    ].map((stat, i) => (
-                      <div key={i} className="bg-notte/70 backdrop-blur-sm border border-viola/15 rounded-xl p-3 flex items-center justify-between">
-                        <span className="text-xs text-muted/70 font-poppins">{stat.label}</span>
-                        <span className={`text-xs font-bold font-poppins ${stat.color}`}>{stat.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* ── Floating badges ── */}
-              {BADGES.map((badge, i) => (
-                <div
-                  key={i}
-                  aria-hidden
-                  style={{
-                    position: "absolute",
-                    top: badge.top,
-                    left: badge.left,
-                    right: badge.right,
-                    opacity: visibleBadges[i] ? 1 : 0,
-                    transform: visibleBadges[i] ? "translateY(0)" : "translateY(8px)",
-                    transition: `opacity 0.4s ease, transform 0.4s ease`,
-                  }}
-                  className="bg-notte/85 backdrop-blur-md border border-viola/30 rounded-full px-3 py-1.5 text-xs font-poppins font-semibold text-testo shadow-lg shadow-viola/20 whitespace-nowrap"
-                >
-                  {badge.label}
-                </div>
-              ))}
-            </div>
+          {/* CTAs */}
+          <div className="hero-animate-cta flex flex-col sm:flex-row gap-3">
+            <a
+              href={QUIZ_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("cta_quiz_hero")}
+              id="cta-quiz-hero"
+              className="py-4 px-7 rounded-btn bg-viola text-white font-poppins font-bold text-sm uppercase tracking-wide hover:bg-viola-hover transition-colors whitespace-nowrap"
+            >
+              SCOPRI SE FA PER TE →
+            </a>
+            <a
+              href="#scelta"
+              onClick={() => trackEvent("cta_academy_hero")}
+              id="cta-academy-hero"
+              className="py-4 px-7 rounded-btn border border-white/25 text-white font-poppins font-medium text-sm uppercase tracking-wide hover:border-white/50 hover:bg-white/5 transition-colors whitespace-nowrap"
+            >
+              SCOPRI L&apos;ACADEMY
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 hero-animate-cta">
-        <span className="text-xs text-testo/30 uppercase tracking-widest">Scopri</span>
-        <div className="w-5 h-8 border border-testo/20 rounded-full flex justify-center pt-1.5">
-          <div className="w-1 h-2 bg-viola/60 rounded-full animate-bounce" />
-        </div>
-      </div>
+      {/* ── Linea divisore in basso ── */}
+      <div
+        aria-hidden
+        className="absolute bottom-0 left-0 right-0 rl-divider"
+      />
     </section>
   );
 }

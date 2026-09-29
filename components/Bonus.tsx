@@ -13,7 +13,7 @@ export default function Bonus() {
     {
       n: "3",
       title: "Recupero",
-      text: "Recuperi l'investimento dell'Academy, in tutto o in parte, in pochi giorni.",
+      text: "Molti studenti recuperano parte dell'investimento tramite i bonus di benvenuto — tempi e importi variano da persona a persona.",
     },
   ];
 
@@ -21,7 +21,7 @@ export default function Bonus() {
     <section
       id="bonus"
       aria-labelledby="bonus-heading"
-      className="py-10 lg:py-16 bg-notte relative overflow-hidden"
+      className="py-10 lg:py-16 rl-bg-a relative overflow-hidden"
     >
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
@@ -47,7 +47,7 @@ export default function Bonus() {
           {steps.map((step) => (
             <div
               key={step.n}
-              className="bg-superficie border border-bordo rounded-card p-4 flex gap-3 hover:border-viola/25 transition-colors duration-200"
+              className="rl-card p-4 flex gap-3"
             >
               <span className="font-anton text-lg text-viola/60 flex-shrink-0 leading-none mt-0.5">
                 {step.n}

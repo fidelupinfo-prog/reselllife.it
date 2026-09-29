@@ -46,12 +46,13 @@ export default function FAQ() {
     <section
       id="faq"
       aria-labelledby="faq-heading"
-      className="py-16 lg:py-28 bg-superficie"
+      className="py-16 lg:py-28 rl-bg-b relative"
     >
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2
             id="faq-heading"
+            data-reveal="blur"
             className="font-anton text-[clamp(2.5rem,6vw,4rem)] uppercase text-testo"
           >
             DOMANDE?

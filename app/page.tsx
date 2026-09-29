@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import { SITE_URL, QUIZ_URL, CALENDLY_URL } from "@/lib/config";
+import { SITE_URL, QUIZ_URL, ACADEMY_URL } from "@/lib/config";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import BrandStatement from "@/components/BrandStatement";
+import ScrollMarquee from "@/components/motion/ScrollMarquee";
 import ProblemSection from "@/components/ProblemSection";
+import StickyStatement from "@/components/motion/StickyStatement";
 import Metodo from "@/components/Metodo";
 import Ecosistema from "@/components/Ecosistema";
 import BotSection from "@/components/BotSection";
 import FornitoriSection from "@/components/FornitoriSection";
 import ProvaSociale from "@/components/ProvaSociale";
+import VideoSection from "@/components/VideoSection";
 import Scelta from "@/components/Scelta";
 import QuizSection from "@/components/QuizSection";
 import CallSection from "@/components/CallSection";
@@ -16,7 +18,6 @@ import Bonus from "@/components/Bonus";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import BonusWheel from "@/components/BonusWheel";
-import { ACADEMY_URL } from "@/lib/config";
 
 export const metadata: Metadata = {
   alternates: {
@@ -103,59 +104,66 @@ export default function HomePage() {
       <Navbar academyUrl={ACADEMY_URL} />
 
       <main id="main-content">
-        {/* 1 — Hero: INIZIA A FARE RESELLING CON UN METODO */}
+        {/* 01 — Hero: INIZIA A FARE RESELLING CON UN METODO */}
         <Hero />
 
-        {/* 2 — Brand Statement: METODO · FORNITORI · BOT · GUIDE · COMMUNITY */}
-        <BrandStatement />
+        {/* 02 — ScrollMarquee: pink band (replaces BrandStatement) */}
+        <ScrollMarquee />
 
-        {/* 3 — Il Problema: IL PROBLEMA NON È INIZIARE */}
+        {/* 03 — Il Problema: IL PROBLEMA NON È INIZIARE */}
         <ProblemSection />
 
-        {/* 4 — Il Metodo: ACQUISTA → VENDI → RIPETI */}
+        {/* 04 — StickyStatement: NON È FORTUNA */}
+        <StickyStatement />
+
+        {/* 05 — Il Metodo: ACQUISTA → VENDI → RIPETI (cream bg) */}
         <Metodo />
 
-        {/* 5 — Cosa c'è dentro Academy */}
+        {/* 06 — Ecosistema: horizontal pin slides */}
         <Ecosistema />
 
-        {/* 6 — Bot Resellife: IL TUO RADAR SUL MERCATO */}
+        {/* 07 — Bot Resellife: IL TUO RADAR SUL MERCATO */}
         <BotSection />
 
-        {/* 7 — Fornitori: NON PARTI DA ZERO. PARTI DA UNA BASE. */}
+        {/* 08 — Fornitori: NON PARTI DA ZERO (white bg) */}
         <FornitoriSection />
 
-        {/* 8 — Prova Sociale: wall of proof */}
+        {/* 09 — Prova Sociale: wall of proof */}
         <ProvaSociale />
 
-        {/* 9 — Scelta: DUE STRADE */}
+        {/* 10 — Video: GUARDA COME FUNZIONA DAVVERO */}
+        <VideoSection />
+
+        {/* 11 — Scelta: DA DOVE VUOI PARTIRE? */}
         <Scelta />
 
-        {/* 10 — Quiz: IL RESELL FA PER TE? */}
+        {/* 12 — Quiz: IL RESELL FA PER TE? */}
         <QuizSection />
 
-        {/* 11 — Call: HAI ANCORA DUBBI? PARLIAMONE IN 15 MINUTI */}
+        {/* 13 — Call: HAI ANCORA DUBBI? */}
         <CallSection />
 
-        {/* 12 — Bonus: L'ACADEMY NON FINISCE CON L'ISCRIZIONE */}
+        {/* 14 — Bonus: INIZIA CON UN VANTAGGIO IN PIÙ */}
         <Bonus />
 
-        {/* 13 — FAQ */}
+        {/* 15 — FAQ */}
         <FAQ />
 
-        {/* 14 — CTA finale pre-footer */}
+        {/* 16 — CTA finale — bg-viola solid */}
         <section
           id="cta-finale"
           aria-labelledby="cta-finale-heading"
-          className="py-16 lg:py-28 bg-superficie"
+          className="py-16 lg:py-28 bg-viola"
         >
           <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2
               id="cta-finale-heading"
-              className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-testo mb-4 leading-none"
+              data-reveal="zoom"
+              className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-white mb-4 leading-none"
             >
               PRONTO A INIZIARE?
             </h2>
-            <p className="text-muted/60 font-poppins mb-8 text-sm">
+            <p data-reveal className="text-white/70 font-poppins mb-8 text-sm">
               Fai prima il quiz — scopri se il reselling fa per te in 60 secondi.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -164,7 +172,7 @@ export default function HomePage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 id="cta-quiz-finale"
-                className="py-4 px-8 rounded-btn bg-viola text-testo font-poppins font-bold text-base uppercase hover:bg-viola-hover transition-all hover:scale-[1.02] shadow-lg shadow-viola/25"
+                className="py-4 px-8 rounded-btn bg-white text-inchiostro font-poppins font-bold text-base uppercase hover:bg-crema transition-all hover:scale-[1.02] shadow-lg"
               >
                 INIZIA IL QUIZ →
               </a>
@@ -172,7 +180,7 @@ export default function HomePage() {
                 href={ACADEMY_URL}
                 rel="noopener"
                 id="cta-academy-finale"
-                className="py-4 px-8 rounded-btn border border-bordo text-testo/70 font-poppins font-medium text-base hover:border-viola/40 hover:text-testo transition-all"
+                className="py-4 px-8 rounded-btn border border-white/40 text-white font-poppins font-medium text-base hover:border-white hover:bg-white/10 transition-all"
               >
                 Entra in Academy
               </a>
@@ -181,7 +189,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* 15 — Footer */}
+      {/* 17 — Footer */}
       <Footer />
 
       {/* Bonus Wheel — global overlay, sessionStorage-gated */}

@@ -35,21 +35,12 @@ export default function QuizSection() {
       ref={sectionRef}
       id="quiz"
       aria-labelledby="quiz-heading"
-      className="py-16 lg:py-28 bg-notte relative overflow-hidden"
+      className="py-16 lg:py-28 rl-bg-b relative overflow-hidden"
     >
-      {/* Background */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-br from-viola/10 via-notte to-notte pointer-events-none"
-      />
-      <div
-        aria-hidden
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[60vh] rounded-full bg-viola/8 blur-[150px] pointer-events-none"
-      />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Big box */}
-        <div className="bg-superficie border border-viola/30 rounded-2xl p-10 lg:p-14 shadow-[0_0_80px_rgba(123,47,214,0.2)]">
+        <div className="rl-card p-10 lg:p-14 shadow-2xl">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-viola/15 border border-viola/30 rounded-full px-4 py-1.5 mb-6">
             <span className="w-2 h-2 rounded-full bg-viola inline-block animate-pulse" />
@@ -60,6 +51,7 @@ export default function QuizSection() {
 
           <h2
             id="quiz-heading"
+            data-reveal="blur"
             className="font-anton text-[clamp(2.5rem,7vw,5rem)] uppercase leading-none text-testo mb-4"
           >
             IL RESELL
@@ -100,7 +92,7 @@ export default function QuizSection() {
             rel="noopener noreferrer"
             onClick={() => trackEvent("quiz_click_section")}
             id="cta-quiz-section"
-            className="inline-block py-5 px-12 rounded-btn bg-viola text-testo font-poppins font-bold text-xl uppercase tracking-wide hover:bg-viola-hover transition-all hover:scale-[1.03] active:scale-[0.99] shadow-[0_0_40px_rgba(123,47,214,0.5)] hover:shadow-[0_0_60px_rgba(123,47,214,0.7)]"
+            className="inline-block py-5 px-12 rounded-btn bg-viola text-testo font-poppins font-bold text-xl uppercase tracking-wide hover:bg-viola-hover transition-all hover:scale-[1.03] active:scale-[0.99] shadow-lg shadow-viola/20"
           >
             FAI IL TEST →
           </a>

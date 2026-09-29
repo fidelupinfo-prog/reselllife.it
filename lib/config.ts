@@ -20,12 +20,13 @@ function get(key: string, fallback = ""): string {
   return process.env[key] ?? fallback;
 }
 
-// ── Academy URL — BLOQUEANTE ──
-// Se vuota in produzione, la pagina mostra un link rotto visibile.
-// Completare in .env.local (sviluppo) e nelle env vars di Vercel (produzione).
+// ── Academy URL ──
+// Completare NEXT_PUBLIC_ACADEMY_URL nelle env vars Railway (produzione)
+// e in .env.local (sviluppo) con l'URL reale del checkout Academy.
+// Fallback temporaneo: WhatsApp per non lasciare un link rotto.
 export const ACADEMY_URL =
   get("NEXT_PUBLIC_ACADEMY_URL") ||
-  "#academy-url-mancante--completare-env";
+  "https://wa.me/393398420279?text=Ciao%2C+voglio+entrare+in+Academy+Resellife";
 
 export const FORM_ENDPOINT = get(
   "NEXT_PUBLIC_FORM_ENDPOINT",

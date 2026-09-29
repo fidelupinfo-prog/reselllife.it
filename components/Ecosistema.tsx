@@ -1,159 +1,148 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { Package, Bot, BookOpen, Users, Headphones } from "lucide-react";
+import HorizontalPin from "@/components/motion/HorizontalPin";
 
+// Alternating slide backgrounds per spec
 const pillars = [
   {
     id: "fornitori",
     Icon: Package,
+    num: "01",
     label: "FORNITORI VERIFICATI",
     desc: "Contatti reali e testati, non liste generiche trovate online.",
-    accent: "border-viola/30 hover:border-viola/60",
-    iconBg: "bg-viola/10 text-viola",
-    delay: 0,
-    // Replace: <Image src="/images/academy-fornitori.png" ... />
-    media: "PDF/catalogo fornitori",
+    bg: "#7B2FD6",
+    text: "#FFFFFF",
+    iconColor: "rgba(255,255,255,0.85)",
   },
   {
     id: "bot",
     Icon: Bot,
+    num: "02",
     label: "BOT RESELLIFE",
     desc: "Il tuo radar sul mercato, attivo 24 ore su 24.",
-    accent: "border-accento/25 hover:border-accento/50",
-    iconBg: "bg-accento/10 text-accento",
-    delay: 100,
-    media: "Dashboard Bot (screenshot reale)",
+    bg: "#FF1FA8",
+    text: "#0A0A0A",
+    iconColor: "#0A0A0A",
   },
   {
     id: "guide",
     Icon: BookOpen,
+    num: "03",
     label: "GUIDE OPERATIVE",
     desc: 'PDF pratici, dalla guida "Da 0 a 1000" alle strategie avanzate.',
-    accent: "border-viola/20 hover:border-viola/50",
-    iconBg: "bg-viola/10 text-viola",
-    delay: 200,
-    media: "Mockup guida PDF",
+    bg: "#F3EFE7",
+    text: "#0A0A0A",
+    iconColor: "#7B2FD6",
   },
   {
     id: "community",
     Icon: Users,
+    num: "04",
     label: "COMMUNITY PRIVATA",
     desc: "700+ persone che stanno facendo la stessa cosa.",
-    accent: "border-bordo hover:border-viola/40",
-    iconBg: "bg-viola/8 text-viola",
-    delay: 300,
-    media: "Screenshot WhatsApp/Telegram",
+    bg: "#1D1D1D",
+    text: "#FFFFFF",
+    iconColor: "#7B2FD6",
+    border: "#262626",
   },
   {
     id: "supporto",
     Icon: Headphones,
+    num: "05",
     label: "SUPPORTO DIRETTO",
     desc: "Rispondiamo noi, non un bot di assistenza.",
-    accent: "border-bordo hover:border-viola/40",
-    iconBg: "bg-viola/8 text-viola",
-    delay: 400,
-    media: "Foto del team",
+    bg: "#FFFFFF",
+    text: "#0A0A0A",
+    iconColor: "#7B2FD6",
   },
 ];
 
-export default function Ecosistema() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(
-    Array(pillars.length).fill(false)
-  );
+const SLIDE_WIDTH = "min(78vw, 380px)";
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          pillars.forEach((p, i) => {
-            setTimeout(() => {
-              setVisibleItems(prev => {
-                const next = [...prev];
-                next[i] = true;
-                return next;
-              });
-            }, p.delay);
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
+function Slide({
+  pillar,
+}: {
+  pillar: (typeof pillars)[0];
+}) {
   return (
-    <section
-      ref={sectionRef}
-      id="ecosistema"
-      aria-labelledby="ecosistema-heading"
-      className="py-16 lg:py-28 bg-notte relative overflow-hidden"
+    <div
+      id={`ecosistema-${pillar.id}`}
+      style={{
+        width: SLIDE_WIDTH,
+        aspectRatio: "3/4",
+        backgroundColor: pillar.bg,
+        color: pillar.text,
+        border: pillar.border ? `1px solid ${pillar.border}` : undefined,
+      }}
+      className="rounded-[22px] p-6 flex flex-col justify-between flex-shrink-0"
     >
-      <div
+      {/* Top: big number */}
+      <span
+        className="font-anton text-[clamp(3rem,8vw,5rem)] leading-none"
+        style={{ color: `${pillar.text}22` }}
         aria-hidden
-        className="absolute bottom-0 left-0 w-[60vw] h-[60vh] rounded-full bg-viola/5 blur-[120px] pointer-events-none"
-      />
+      >
+        {pillar.num}
+      </span>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="text-viola font-poppins font-semibold text-sm uppercase tracking-[0.2em] mb-3">
-            L&apos;ecosistema
-          </p>
-          <h2
-            id="ecosistema-heading"
-            className="font-anton text-[clamp(2rem,5vw,3.5rem)] uppercase text-testo leading-none mb-4"
-          >
-            COSA C&apos;È DENTRO
-            <br />
-            <span className="text-viola">RESELLIFE ACADEMY</span>
-          </h2>
-          <p className="text-muted/70 font-poppins max-w-xl mx-auto leading-relaxed">
-            Non un corso. Un ecosistema completo di strumenti, persone e risorse
-            operative.
-          </p>
+      {/* Bottom: icon + title + desc */}
+      <div>
+        <div
+          className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+          style={{ backgroundColor: `${pillar.iconColor}18` }}
+          aria-hidden
+        >
+          <pillar.Icon
+            className="w-6 h-6"
+            strokeWidth={1.75}
+            style={{ color: pillar.iconColor }}
+          />
         </div>
-
-        {/* Dashboard-style asymmetric grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
-          {pillars.map((p, i) => (
-            <div
-              key={p.id}
-              id={`ecosistema-${p.id}`}
-              style={{
-                opacity: visibleItems[i] ? 1 : 0,
-                transform: visibleItems[i] ? "translateY(0)" : "translateY(20px)",
-                transition: `opacity 0.5s ease ${p.delay}ms, transform 0.5s ease ${p.delay}ms`,
-              }}
-              className={`bg-superficie border ${p.accent} rounded-card-lg p-6 transition-colors duration-300 group cursor-default ${
-                // Make bot card span 2 columns on md+
-                p.id === "bot" ? "lg:col-span-2" : ""
-              }`}
-            >
-              <div
-                className={`w-11 h-11 rounded-xl ${p.iconBg} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}
-                aria-hidden
-              >
-                <p.Icon className="w-5 h-5" strokeWidth={1.75} />
-              </div>
-              <h3 className="font-anton text-lg uppercase text-testo mb-2 tracking-wide">
-                {p.label}
-              </h3>
-              <p className="text-muted/65 text-sm font-poppins leading-relaxed">
-                {p.desc}
-              </p>
-              {/* Asset note — dev-only, replace with real <Image> from Drive */}
-              <p className="mt-3 text-[10px] text-testo/15 font-poppins italic">
-                Media: {p.media}
-              </p>
-            </div>
-          ))}
-        </div>
+        <h3
+          className="font-anton text-xl uppercase leading-tight mb-2"
+          style={{ color: pillar.text }}
+        >
+          {pillar.label}
+        </h3>
+        <p
+          className="font-poppins text-sm leading-relaxed"
+          style={{ color: `${pillar.text}BB` }}
+        >
+          {pillar.desc}
+        </p>
       </div>
-    </section>
+    </div>
+  );
+}
+
+const heading = (
+  <div>
+    <p className="text-viola font-poppins font-semibold text-sm uppercase tracking-[0.2em] mb-3">
+      L&apos;ecosistema
+    </p>
+    <h2
+      id="ecosistema-heading"
+      className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-testo leading-none"
+    >
+      COSA C&apos;È DENTRO
+      <br />
+      <span className="text-viola">RESELLIFE ACADEMY</span>
+    </h2>
+  </div>
+);
+
+export default function Ecosistema() {
+  return (
+    <HorizontalPin
+      heading={heading}
+      heightVh={320}
+      showCounter
+      className="bg-notte"
+    >
+      {pillars.map((p) => (
+        <Slide key={p.id} pillar={p} />
+      ))}
+    </HorizontalPin>
   );
 }

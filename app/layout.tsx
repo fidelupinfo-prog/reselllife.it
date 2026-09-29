@@ -3,7 +3,8 @@ import { Anton, Poppins } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/config";
 import CookieBanner from "@/components/CookieBanner";
-
+import ScrollProgress from "@/components/motion/ScrollProgress";
+import RevealObserver from "@/components/motion/RevealObserver";
 
 // ── Fonts autohosted — zero runtime requests to Google ──
 const anton = Anton({
@@ -69,11 +70,12 @@ export default function RootLayout({
       className={`${anton.variable} ${poppins.variable}`}
     >
       <body className="bg-notte text-testo font-poppins antialiased">
+        {/* Scroll progress bar — fixed top */}
+        <ScrollProgress />
+        {/* Reveal observer — activates data-reveal animations */}
+        <RevealObserver />
         {children}
-        {/* Cookie banner — renders on client, fires no pixels before consent */}
         <CookieBanner />
-        {/* Mobile sticky CTA — appears after scrolling past hero */}
-
       </body>
     </html>
   );
