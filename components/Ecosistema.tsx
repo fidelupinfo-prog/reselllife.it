@@ -13,6 +13,7 @@ const pillars = [
     desc: "Contatti reali e testati, non liste generiche trovate online.",
     bg: "#7B2FD6",
     text: "#FFFFFF",
+    numColor: "rgba(255,255,255,0.25)",
     iconColor: "rgba(255,255,255,0.85)",
   },
   {
@@ -23,6 +24,7 @@ const pillars = [
     desc: "Il tuo radar sul mercato, attivo 24 ore su 24.",
     bg: "#FF1FA8",
     text: "#0A0A0A",
+    numColor: "rgba(10,10,10,0.25)",
     iconColor: "#0A0A0A",
   },
   {
@@ -31,9 +33,10 @@ const pillars = [
     num: "03",
     label: "GUIDE OPERATIVE",
     desc: 'PDF pratici, dalla guida "Da 0 a 1000" alle strategie avanzate.',
-    bg: "#F3EFE7",
-    text: "#0A0A0A",
-    iconColor: "#7B2FD6",
+    bg: "#2F6BFF",
+    text: "#FFFFFF",
+    numColor: "rgba(255,255,255,0.25)",
+    iconColor: "#FFFFFF",
   },
   {
     id: "community",
@@ -41,10 +44,11 @@ const pillars = [
     num: "04",
     label: "COMMUNITY PRIVATA",
     desc: "700+ persone che stanno facendo la stessa cosa.",
-    bg: "#1D1D1D",
+    bg: "#141414",
     text: "#FFFFFF",
-    iconColor: "#7B2FD6",
-    border: "#262626",
+    numColor: "rgba(255,255,255,0.25)",
+    iconColor: "#FF1FA8",
+    border: "#2F6BFF",
   },
   {
     id: "supporto",
@@ -52,9 +56,10 @@ const pillars = [
     num: "05",
     label: "SUPPORTO DIRETTO",
     desc: "Rispondiamo noi, non un bot di assistenza.",
-    bg: "#FFFFFF",
-    text: "#0A0A0A",
-    iconColor: "#7B2FD6",
+    bg: "linear-gradient(140deg, #FF1FA8, #7B2FD6 55%, #2F6BFF)",
+    text: "#FFFFFF",
+    numColor: "rgba(255,255,255,0.25)",
+    iconColor: "#FFFFFF",
   },
 ];
 
@@ -71,7 +76,7 @@ function Slide({
       style={{
         width: SLIDE_WIDTH,
         aspectRatio: "3/4",
-        backgroundColor: pillar.bg,
+        background: pillar.bg,
         color: pillar.text,
         border: pillar.border ? `1px solid ${pillar.border}` : undefined,
       }}
@@ -80,7 +85,7 @@ function Slide({
       {/* Top: big number */}
       <span
         className="font-anton text-[clamp(3rem,8vw,5rem)] leading-none"
-        style={{ color: `${pillar.text}22` }}
+        style={{ color: pillar.numColor }}
         aria-hidden
       >
         {pillar.num}
@@ -118,16 +123,17 @@ function Slide({
 
 const heading = (
   <div>
-    <p className="text-viola font-poppins font-semibold text-sm uppercase tracking-[0.2em] mb-3">
+    <p className="text-blu font-poppins font-semibold text-sm uppercase tracking-[0.2em] mb-3">
       L&apos;ecosistema
     </p>
     <h2
       id="ecosistema-heading"
+      data-reveal="blur"
       className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-testo leading-none"
     >
       COSA C&apos;È DENTRO
       <br />
-      <span className="text-viola">RESELLIFE ACADEMY</span>
+      <span className="rl-grad-text">RESELLIFE ACADEMY</span>
     </h2>
   </div>
 );

@@ -40,7 +40,7 @@ export default function QuizSection() {
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Big box */}
-        <div className="rl-card p-10 lg:p-14 shadow-2xl">
+        <div className="rl-grad-border p-10 lg:p-14 shadow-[0_20px_80px_rgba(123,47,214,0.25)]">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-viola/15 border border-viola/30 rounded-full px-4 py-1.5 mb-6">
             <span className="w-2 h-2 rounded-full bg-viola inline-block animate-pulse" />
@@ -56,7 +56,7 @@ export default function QuizSection() {
           >
             IL RESELL
             <br />
-            <span className="text-viola">FA PER TE?</span>
+            <span className="rl-grad-text">FA PER TE?</span>
           </h2>
 
           <p className="text-muted/70 font-poppins leading-relaxed mb-8 max-w-lg mx-auto">

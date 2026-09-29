@@ -23,6 +23,8 @@
   /* New tokens */
   --color-crema:         #F3EFE7;
   --color-inchiostro:    #0A0A0A;
+  --color-blu:           #2F6BFF;
+  --color-blu-hover:     #5B8CFF;
 
   /* ── Typography ── */
   --font-anton:   "Anton",   sans-serif;
@@ -93,10 +95,48 @@ body {
   background-size: 24px 24px;
 }
 
-/* Cream / light sections */
+/* Cream / light sections (deprecated but kept for legacy small UI elements if needed) */
 .rl-bg-crema {
   background-color: #F3EFE7;
   color: #0A0A0A;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   GRADIENTS E GLOW (NUOVA DIREZIONE VISIVA)
+───────────────────────────────────────────────────────────────────────────── */
+
+.rl-grad {
+  background-image: linear-gradient(100deg, #FF1FA8 0%, #7B2FD6 50%, #2F6BFF 100%);
+}
+
+.rl-grad-text {
+  background-image: linear-gradient(100deg, #FF1FA8 0%, #7B2FD6 50%, #2F6BFF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.rl-grad-border {
+  position: relative;
+  background: #121212;
+  border-radius: 20px;
+}
+
+.rl-grad-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #FF1FA8, #7B2FD6, #2F6BFF);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.rl-glow-blu {
+  background: radial-gradient(closest-side, rgba(47, 107, 255, 0.28), transparent);
 }
 
 /* Divisore orizzontale strutturale */

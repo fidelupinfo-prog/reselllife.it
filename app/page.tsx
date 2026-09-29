@@ -153,17 +153,17 @@ export default function HomePage() {
         <section
           id="cta-finale"
           aria-labelledby="cta-finale-heading"
-          className="py-16 lg:py-28 bg-viola"
+          className="py-20 lg:py-32 rl-grad"
         >
-          <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2
               id="cta-finale-heading"
               data-reveal="zoom"
-              className="font-anton text-[clamp(1.8rem,4vw,3rem)] uppercase text-white mb-4 leading-none"
+              className="font-anton text-[clamp(2.8rem,8vw,6rem)] uppercase text-white mb-6 leading-[0.9]"
             >
               PRONTO A INIZIARE?
             </h2>
-            <p data-reveal className="text-white/70 font-poppins mb-8 text-sm">
+            <p data-reveal className="text-white font-poppins font-medium mb-10 text-base">
               Fai prima il quiz — scopri se il reselling fa per te in 60 secondi.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -172,7 +172,7 @@ export default function HomePage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 id="cta-quiz-finale"
-                className="py-4 px-8 rounded-btn bg-white text-inchiostro font-poppins font-bold text-base uppercase hover:bg-crema transition-all hover:scale-[1.02] shadow-lg"
+                className="py-4 px-8 rounded-btn bg-inchiostro text-white font-poppins font-bold text-base uppercase hover:bg-black transition-all hover:scale-[1.02] shadow-lg"
               >
                 INIZIA IL QUIZ →
               </a>
@@ -180,7 +180,7 @@ export default function HomePage() {
                 href={ACADEMY_URL}
                 rel="noopener"
                 id="cta-academy-finale"
-                className="py-4 px-8 rounded-btn border border-white/40 text-white font-poppins font-medium text-base hover:border-white hover:bg-white/10 transition-all"
+                className="py-4 px-8 rounded-btn border-2 border-white text-white font-poppins font-medium text-base hover:bg-white hover:text-inchiostro transition-all"
               >
                 Entra in Academy
               </a>

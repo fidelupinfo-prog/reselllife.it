@@ -11,6 +11,8 @@ interface ScrollWordsProps {
   className?: string;
   highlightClassName?: string;
   as?: Tag;
+  progress?: ReturnType<typeof useScroll>["scrollYProgress"];
+  range?: [number, number];
 }
 
 /**
@@ -24,14 +26,19 @@ export default function ScrollWords({
   className = "",
   highlightClassName = "text-viola",
   as: Tag = "p",
+  progress,
+  range = [0, 1],
 }: ScrollWordsProps) {
   const ref = useRef<HTMLDivElement>(null);
   const shouldReduce = useReducedMotion();
 
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: defaultProgress } = useScroll({
     target: ref,
     offset: ["start 0.85", "end 0.4"],
   });
+
+  const scrollYProgress = progress ?? defaultProgress;
+  const mappedProgress = useTransform(scrollYProgress, range, [0, 1]);
 
   const words = text.split(" ");
 
@@ -42,7 +49,9 @@ export default function ScrollWords({
         {words.map((word, i) => {
           const start = i / words.length;
           const end = (i + 1) / words.length;
-          const isHighlighted = highlight.includes(word);
+          
+          const clean = word.replace(/[.,:;!?"“”«»]/g, "").toLowerCase();
+          const isHighlighted = highlight.some(h => h.toLowerCase() === clean);
 
           return (
             <Word
@@ -50,7 +59,7 @@ export default function ScrollWords({
               word={word}
               start={start}
               end={end}
-              progress={scrollYProgress}
+              progress={mappedProgress}
               isHighlighted={isHighlighted}
               highlightClassName={highlightClassName}
               shouldReduce={!!shouldReduce}
@@ -86,18 +95,22 @@ function Word({
 
   if (shouldReduce) {
     return (
-      <span className={isHighlighted ? highlightClassName : ""}>
-        {word}{" "}
-      </span>
+      <>
+        <span className={isHighlighted ? highlightClassName : ""}>
+          {word}
+        </span>{" "}
+      </>
     );
   }
 
   return (
-    <motion.span
-      style={{ opacity, y, display: "inline-block" }}
-      className={isHighlighted ? highlightClassName : ""}
-    >
-      {word}{" "}
-    </motion.span>
+    <>
+      <motion.span
+        style={{ opacity, y, display: "inline-block" }}
+        className={isHighlighted ? highlightClassName : ""}
+      >
+        {word}
+      </motion.span>{" "}
+    </>
   );
 }

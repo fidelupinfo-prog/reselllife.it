@@ -92,7 +92,7 @@ export default function Hero() {
             <br />
             RESELLING
             <br />
-            <span className="text-viola">CON UN METODO.</span>
+            <span className="rl-grad-text">CON UN METODO.</span>
           </h1>
 
           <p className="hero-animate-sub font-poppins text-[clamp(0.95rem,1.8vw,1.1rem)] text-white/65 leading-relaxed max-w-xl mb-8">
