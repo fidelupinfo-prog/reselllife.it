@@ -49,3 +49,11 @@ fotos/
 *.mov
 *.avi
 *.webm
+
+# Permititi: piccoli video del sito
+!public/videos/sito/
+!public/videos/sito/**/*.mp4
+!public/videos/sito/**/*.jpg
+!public/videos/dicono/
+!public/videos/dicono/**/*.mp4
+!public/videos/dicono/**/*.jpg
